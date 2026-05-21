@@ -1,4 +1,4 @@
-import Dexie from 'dexie';
+import Dexie, { Table } from 'dexie';
 
 // 1. Interface untuk Item/Barang
 export interface Item {
@@ -43,10 +43,41 @@ export interface Customer {
   vehicle_plate?: string;
   email?: string;
   address?: string;
-  updated_at?: number;
+  updated_at: number;
 }
 
-// 4. Interface untuk Riwayat Servis
+// 4. Interface untuk Vehicle
+export interface Vehicle {
+  id?: number;
+  plate_number: string;
+  brand?: string;
+  model?: string;
+  year?: number;
+  owner_name?: string;
+  phone?: string;
+  updated_at: number;
+}
+
+// 5. Interface untuk Transaction
+export interface Transaction {
+  id?: number;
+  invoice_number: string;
+  date: number;
+  customer_name?: string;
+  total_amount: number;
+  total_cost?: number;
+  items: any[];
+  type?: string;
+  status: 'Lunas' | 'Belum Lunas';
+  payment_method?: string;
+  amount_paid?: number;
+  remaining_amount?: number;
+  discount?: number;
+  tax?: number;
+  created_at?: number;
+}
+
+// 6. Interface untuk Riwayat Servis
 export interface ServiceRecord {
   id?: number;
   spk_id?: number;
@@ -60,7 +91,7 @@ export interface ServiceRecord {
   updated_at: number;
 }
 
-// 5. Interface untuk Pending Transaction
+// 7. Interface untuk Pending Transaction
 export interface PendingTransaction {
   id?: number;
   temp_id: string;
@@ -77,33 +108,70 @@ export interface PendingTransaction {
   updated_at: number;
 }
 
-// 6. Interface untuk Service Queue
+// 8. Interface untuk Service Queue
 export interface ServiceQueue {
   id?: number;
   queue_number: string;
   vehicle_plate: string;
-  owner_name: string;
-  service_type: string;
+  owner_name?: string;
+  service_type?: string;
   status: 'waiting' | 'in_progress' | 'completed';
   created_at: number;
   updated_at: number;
 }
 
-// 7. Inisialisasi Database
-const db = new Dexie("BengkelDatabase");
+// 9. Interface untuk Expense
+export interface Expense {
+  id?: number;
+  date: number;
+  category: string;
+  description?: string;
+  amount: number;
+  receipt_image?: string;
+  created_at?: number;
+}
 
-db.version(2).stores({
-  items: "++id, sku, name, category, stock, updated_at",
-  spk: "++id, spk_number, vehicle_plate, status, date",
-  customers: "++id, name, phone, vehicle_plate, updated_at",
-  vehicles: "++id, plate_number, owner_name, updated_at",
-  transactions: "++id, invoice_number, date, customer_name, status",
-  pending_transactions: "++id, temp_id, date, customer_name",
-  expenses: "++id, date, category, description",
-  service_queue: "++id, queue_number, vehicle_plate, status, created_at",
-  riwayat_servis: "++id, spk_id, vehicle_plate, date, status"
-});
+// 10. Database Class dengan typing yang benar
+class BengkelDatabase extends Dexie {
+  items!: Table<Item, number>;
+  spk!: Table<SPK, number>;
+  customers!: Table<Customer, number>;
+  vehicles!: Table<Vehicle, number>;
+  transactions!: Table<Transaction, number>;
+  riwayat_servis!: Table<ServiceRecord, number>;
+  pending_transactions!: Table<PendingTransaction, number>;
+  service_queue!: Table<ServiceQueue, number>;
+  expenses!: Table<Expense, number>;
 
-// 8. Export semua
-export { db };
-export type { Item, SPK, Customer, ServiceRecord, PendingTransaction, ServiceQueue };
+  constructor() {
+    super("BengkelDatabase");
+    
+    this.version(2).stores({
+      items: "++id, sku, name, category, stock, updated_at",
+      spk: "++id, spk_number, vehicle_plate, status, date",
+      customers: "++id, name, phone, vehicle_plate, updated_at",
+      vehicles: "++id, plate_number, owner_name, updated_at",
+      transactions: "++id, invoice_number, date, customer_name, status",
+      pending_transactions: "++id, temp_id, date, customer_name",
+      expenses: "++id, date, category, description",
+      service_queue: "++id, queue_number, vehicle_plate, status, created_at",
+      riwayat_servis: "++id, spk_id, vehicle_plate, date, status"
+    });
+  }
+}
+
+// 11. Export database instance
+export const db = new BengkelDatabase();
+
+// 12. Export semua types
+export type { 
+  Item, 
+  SPK, 
+  Customer, 
+  Vehicle,
+  Transaction,
+  ServiceRecord, 
+  PendingTransaction, 
+  ServiceQueue,
+  Expense 
+};
