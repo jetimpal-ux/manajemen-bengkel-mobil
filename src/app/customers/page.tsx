@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { db } from "../../lib/db";
+import { db, Customer } from "../../lib/db";
 import { Plus, Trash2, User, Pencil } from "lucide-react";
 
 export default function Customers() {
