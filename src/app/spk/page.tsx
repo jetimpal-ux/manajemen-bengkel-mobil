@@ -12,7 +12,6 @@ export default function SPKManager() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
-  // 🆕 Filter Status: 'pending' | 'completed' | 'all'
   const [statusFilter, setStatusFilter] = useState<'pending' | 'completed' | 'all'>('pending');
 
   const [form, setForm] = useState<Partial<SPK>>({
@@ -36,21 +35,17 @@ export default function SPKManager() {
   const [tempService, setTempService] = useState({ name: "", duration: 0, price: 0 });
   const [tempPart, setTempPart] = useState({ name: "", qty: 1, price: 0 });
 
-  // Load SPK dari database
   const loadSPK = async () => {
     setIsLoading(true);
     try {
-      // Ambil semua data dari IndexedDB
       let list = await db.spk.toArray();
       
-      // Filter berdasarkan status
       if (statusFilter === 'pending') {
         list = list.filter(s => s.status === 'pending');
       } else if (statusFilter === 'completed') {
         list = list.filter(s => s.status === 'completed');
       }
       
-      // Filter berdasarkan search term
       if (searchTerm) {
         const lowerTerm = searchTerm.toLowerCase();
         list = list.filter(s => 
@@ -60,11 +55,8 @@ export default function SPKManager() {
         );
       }
       
-      // Sort berdasarkan tanggal terbaru
       list.sort((a, b) => b.date - a.date);
-      
       setSpkList(list);
-      console.log(`✅ Loaded ${list.length} SPK (Filter: ${statusFilter})`);
     } catch (error) {
       console.error("Error loading SPK:", error);
     } finally {
@@ -72,12 +64,10 @@ export default function SPKManager() {
     }
   };
 
-  // Reload saat filter atau search berubah
   useEffect(() => { 
     loadSPK(); 
   }, [statusFilter, searchTerm]);
 
-  // 🆕 Sinkronisasi dari Supabase ke Lokal
   const syncFromSupabase = async () => {
     setIsSyncing(true);
     try {
@@ -99,14 +89,10 @@ export default function SPKManager() {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        // Hapus semua data lokal dulu
         await db.spk.clear();
-        
-        // Masukkan data dari Supabase ke IndexedDB
         await db.spk.bulkAdd(data);
-        
         console.log(`✅ Sync berhasil: ${data.length} SPK dari Supabase`);
-        loadSPK(); // Reload data
+        loadSPK();
       }
     } catch (error: any) {
       console.error("❌ Error sync dari Supabase:", error.message);
@@ -122,7 +108,6 @@ export default function SPKManager() {
     return `SPK-${today}-${String(countToday).padStart(3, '0')}`;
   };
 
-  // ✅ FUNGSI ADD SERVICE DENGAN FUNCTIONAL UPDATE
   const addService = () => {
     if (!tempService.name || tempService.price <= 0) return;
     
@@ -142,7 +127,6 @@ export default function SPKManager() {
     setTempService({ name: "", duration: 0, price: 0 });
   };
 
-  // ✅ FUNGSI ADD PART DENGAN FUNCTIONAL UPDATE
   const addPart = () => {
     if (!tempPart.name || tempPart.price <= 0) return;
     
@@ -162,7 +146,6 @@ export default function SPKManager() {
     setTempPart({ name: "", qty: 1, price: 0 });
   };
 
-  // ✅ FUNGSI REMOVE SERVICE
   const removeService = (index: number) => {
     setForm(prev => {
       const newServices = prev.services?.filter((_, i) => i !== index) || [];
@@ -177,7 +160,6 @@ export default function SPKManager() {
     });
   };
 
-  // ✅ FUNGSI REMOVE PART
   const removePart = (index: number) => {
     setForm(prev => {
       const newParts = prev.parts?.filter((_, i) => i !== index) || [];
@@ -192,7 +174,6 @@ export default function SPKManager() {
     });
   };
 
-  // 🆕 FUNGSI EDIT SPK
   const handleEdit = (spk: SPK) => {
     setEditingId(spk.id!);
     setForm({
@@ -215,17 +196,14 @@ export default function SPKManager() {
     setIsFormOpen(true);
   };
 
-  // 🆕 FUNGSI BATAL EDIT
   const handleCancelEdit = () => {
     setEditingId(null);
     resetForm();
   };
 
-  // ✅ FUNGSI SAVE SPK BARU (dengan sync ke Supabase)
   const handleSaveSPK = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validasi
     if ((!form.services || form.services.length === 0) && 
         (!form.parts || form.parts.length === 0)) {
       alert("⚠️ Tambahkan minimal 1 jasa servis atau 1 sparepart!");
@@ -255,10 +233,8 @@ export default function SPKManager() {
     };
     
     try {
-      // 1. Simpan ke IndexedDB
       const id = await db.spk.add(spkData);
       
-      // 2. Sync ke Supabase
       const syncResult = await uploadSPKToSupabase(spkData);
       if (!syncResult.success) {
         console.warn("⚠️ Gagal sync ke Supabase, data tetap tersimpan lokal");
@@ -273,134 +249,60 @@ export default function SPKManager() {
     }
   };
 
-// 🆕 FUNGSI UPDATE SPK
-const handleUpdateSPK = async (e: React.FormEvent) => {
-  e.preventDefault();
-  
-  if (!editingId) return;
-  
-  // Validasi
-  if ((!form.services || form.services.length === 0) && 
-      (!form.parts || form.parts.length === 0)) {
-    alert("⚠️ Tambahkan minimal 1 jasa servis atau 1 sparepart!");
-    return;
-  }
-  
-  // Buat object update - gunakan 'any' untuk bypass type checking
-  const updateData: any = {
-    spk_number: form.spk_number,
-    date: form.date,
-    vehicle_plate: form.vehicle_plate,
-    vehicle_info: form.vehicle_info,
-    owner_name: form.owner_name,
-    current_km: form.current_km,
-    next_km_service: form.next_km_service,
-    complaints: form.complaints,
-    mechanic_name: form.mechanic_name,
-    services: form.services || [],
-    parts: form.parts || [],
-    total_service_cost: form.total_service_cost || 0,
-    total_parts_cost: form.total_parts_cost || 0,
-    grand_total: form.grand_total || 0,
-    status: form.status,
-    updated_at: Date.now()
-  };
-  
-  try {
-    // 1. Update di IndexedDB (bypass type checking)
-    await db.spk.update(editingId, updateData as any);
-    console.log("✅ Berhasil update di IndexedDB");
+  const handleUpdateSPK = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    // 2. 🆕 Sync ke Supabase
-    const syncResult = await uploadSPKToSupabase(updateData);
-    if (syncResult.success) {
-      console.log("☁️ Berhasil update di Supabase!");
+    if (!editingId) return;
+    
+    if ((!form.services || form.services.length === 0) && 
+        (!form.parts || form.parts.length === 0)) {
+      alert("⚠️ Tambahkan minimal 1 jasa servis atau 1 sparepart!");
+      return;
     }
     
-    alert(`SPK ${form.spk_number} berhasil diupdate!\n✅ Tersimpan lokal & cloud`);
-    setEditingId(null);
-    resetForm();
-    loadSPK();
-  } catch (error: any) {
-    console.error("❌ Error update SPK:", error);
-    alert("Gagal update SPK: " + error.message);
-  }
-};
-
-    // 🆕 FUNGSI UPDATE SPK
-const handleUpdateSPK = async (e: React.FormEvent) => {
-  e.preventDefault();
-  
-  if (!editingId) return;
-  
-  // Validasi
-  if ((!form.services || form.services.length === 0) && 
-      (!form.parts || form.parts.length === 0)) {
-    alert("⚠️ Tambahkan minimal 1 jasa servis atau 1 sparepart!");
-    return;
-  }
-  
-  const updateData = {
-    ...form,
-    services: form.services || [],
-    parts: form.parts || [],
-    updated_at: Date.now()
-  } as SPK;
-  
-  try {
-    // 1. Update di IndexedDB
-    await db.spk.update(editingId, updateData);
+    const updateData: any = {
+      spk_number: form.spk_number,
+      date: form.date,
+      vehicle_plate: form.vehicle_plate,
+      vehicle_info: form.vehicle_info,
+      owner_name: form.owner_name,
+      current_km: form.current_km,
+      next_km_service: form.next_km_service,
+      complaints: form.complaints,
+      mechanic_name: form.mechanic_name,
+      services: form.services || [],
+      parts: form.parts || [],
+      total_service_cost: form.total_service_cost || 0,
+      total_parts_cost: form.total_parts_cost || 0,
+      grand_total: form.grand_total || 0,
+      status: form.status,
+      updated_at: Date.now()
+    };
     
-    // 2. 🆕 AUTO-CREATE RIWAYAT SERVIS jika status berubah ke 'completed'
-    if (updateData.status === 'completed') {
-      const existingRiwayat = await db.riwayat_servis
-        .where('spk_id')
-        .equals(editingId)
-        .first();
+    try {
+      await db.spk.update(editingId, updateData);
       
-      if (!existingRiwayat) {
-        // Buat catatan riwayat servis baru
-        await db.riwayat_servis.add({
-          spk_id: editingId,
-          customer_name: updateData.owner_name,
-          vehicle_plate: updateData.vehicle_plate,
-          service_type: 'Servis Berkala',
-          description: updateData.complaints,
-          date: updateData.date,
-          cost: updateData.grand_total,
-          status: 'completed',
-          updated_at: Date.now()
-        });
-        
-        console.log('✅ Riwayat servis otomatis dibuat untuk SPK:', updateData.spk_number);
+      const syncResult = await uploadSPKToSupabase(updateData);
+      if (!syncResult.success) {
+        console.warn("⚠️ Gagal sync ke Supabase");
       }
+      
+      alert(`SPK ${form.spk_number} berhasil diupdate!\n✅ Tersimpan lokal & cloud`);
+      setEditingId(null);
+      resetForm();
+      loadSPK();
+    } catch (error: any) {
+      console.error("❌ Error update SPK:", error);
+      alert("Gagal update SPK: " + error.message);
     }
-    
-    // 3. Sync ke Supabase
-    const syncResult = await uploadSPKToSupabase(updateData);
-    if (!syncResult.success) {
-      console.warn("⚠️ Gagal sync ke Supabase");
-    }
-    
-    alert(`SPK ${form.spk_number} berhasil diupdate!\n✅ Tersimpan lokal & cloud`);
-    setEditingId(null);
-    resetForm();
-    loadSPK();
-  } catch (error: any) {
-    console.error("❌ Error update SPK:", error);
-    alert("Gagal update SPK: " + error.message);
-  }
-};
   };
 
-  // 🆕 FUNGSI HAPUS SPK
   const handleDeleteSPK = async (id: number, spkNumber: string) => {
     if (!confirm(`Yakin hapus SPK ${spkNumber}?`)) return;
     
     try {
       await db.spk.delete(id);
       
-      // Hapus juga dari Supabase
       const { createClient } = await import('@supabase/supabase-js');
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -439,7 +341,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
     setIsFormOpen(false);
   };
 
-  // 🆕 FUNGSI MANUAL SYNC KE SUPABASE
   const handleManualSync = async () => {
     setIsSyncing(true);
     const allSPKs = await db.spk.toArray();
@@ -459,11 +360,9 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
     setIsSyncing(false);
   };
 
-  // 🆕 FUNGSI KIRIM KE KASIR
   const handleSendToCashier = (spk: SPK) => {
     const cartItems: any[] = [];
     
-    // 1. Masukkan Jasa Servis
     if (spk.services && spk.services.length > 0) {
       spk.services.forEach((s, idx) => {
         cartItems.push({
@@ -480,7 +379,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
       });
     }
 
-    // 2. Masukkan Sparepart
     if (spk.parts && spk.parts.length > 0) {
       spk.parts.forEach((p, idx) => {
         cartItems.push({
@@ -502,7 +400,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
       return;
     }
 
-    // Simpan ke Session Storage
     sessionStorage.setItem('spk_cart_data', JSON.stringify(cartItems));
     sessionStorage.setItem('kasir_vehicle_data', JSON.stringify({
       plate: spk.vehicle_plate,
@@ -510,7 +407,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
       model: spk.vehicle_info
     }));
     
-    // Redirect ke Halaman Utama (Kasir)
     window.location.href = '/';
   };
 
@@ -528,7 +424,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
           <p className="text-slate-400 mt-1">Dokumen resmi pekerjaan bengkel</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          {/* 🆕 TOMBOL REFRESH DARI CLOUD */}
           <button 
             onClick={syncFromSupabase} 
             disabled={isSyncing}
@@ -542,7 +437,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
             {isSyncing ? 'Syncing...' : 'Refresh Cloud'}
           </button>
 
-          {/* TOMBOL SYNC UPLOAD */}
           <button 
             onClick={handleManualSync} 
             disabled={isSyncing}
@@ -572,7 +466,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
             />
           </div>
           
-          {/* Filter Status Buttons */}
           <div className="flex gap-2">
             <button
               onClick={() => setStatusFilter('pending')}
@@ -623,7 +516,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
           </p>
         </div>
       ) : (
-        /* LIST SPK */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {spkList.map(spk => (
             <div key={spk.id} className="bg-gray-800/60 border border-purple-500/20 rounded-2xl p-6 hover:border-purple-500/50 transition-all">
@@ -641,7 +533,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                     {spk.status === 'completed' ? '✅ Selesai' : spk.status === 'in_progress' ? '🔧 Dikerjakan' : '⏳ Pending'}
                   </span>
                   
-                  {/* TOMBOL EDIT */}
                   <button 
                     onClick={() => handleEdit(spk)}
                     className="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all"
@@ -650,7 +541,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                     <Pencil className="w-4 h-4" />
                   </button>
                   
-                  {/* TOMBOL HAPUS */}
                   <button 
                     onClick={() => handleDeleteSPK(spk.id!, spk.spk_number)}
                     className="p-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-all"
@@ -684,7 +574,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                   <span className="text-white">{formatRupiah(spk.grand_total)}</span>
                 </div>
 
-                {/* TOMBOL LANJUT KE KASIR (Hanya muncul jika status pending) */}
                 {spk.status === 'pending' && (
                   <button 
                     onClick={() => handleSendToCashier(spk)}
@@ -694,7 +583,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                   </button>
                 )}
                 
-                {/* Status Selesai Badge */}
                 {spk.status === 'completed' && (
                   <div className="w-full mt-4 bg-green-900/30 border border-green-500/30 text-green-300 py-2 rounded-lg font-bold flex items-center justify-center gap-2">
                     <CheckCircle2 className="w-4 h-4" /> Sudah Dibayar
@@ -706,7 +594,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
         </div>
       )}
 
-      {/* MODAL FORM SPK */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50">
           <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-purple-500/30 my-4">
@@ -718,7 +605,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
             </div>
 
             <form onSubmit={editingId ? handleUpdateSPK : handleSaveSPK} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-              {/* INFO KENDARAAN */}
               <div className="bg-gray-800/50 p-3 sm:p-4 rounded-xl border border-gray-700">
                 <h3 className="font-bold text-purple-400 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
                   <Car className="w-4 h-4 sm:w-5 sm:h-5" /> Informasi Kendaraan
@@ -751,13 +637,11 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                 </div>
               </div>
 
-              {/* KELUHAN */}
               <div>
                 <label className="text-xs text-slate-400 uppercase block mb-2">Keluhan / Keterangan</label>
                 <textarea value={form.complaints} onChange={e => setForm({...form, complaints: e.target.value})} rows={3} className="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm" placeholder="Mesin berbunyi kasar, oli sudah hitam..." />
               </div>
 
-              {/* JASA SERVIS */}
               <div className="bg-gray-800/50 p-3 sm:p-4 rounded-xl border border-gray-700">
                 <h3 className="font-bold text-blue-400 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <Wrench className="w-4 h-4" /> Jasa Servis
@@ -784,7 +668,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                 ))}
               </div>
 
-              {/* SPAREPART */}
               <div className="bg-gray-800/50 p-3 sm:p-4 rounded-xl border border-gray-700">
                 <h3 className="font-bold text-green-400 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <Package className="w-4 h-4" /> Sparepart
@@ -810,7 +693,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                 ))}
               </div>
 
-              {/* TOTAL */}
               <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-4 rounded-xl border border-purple-500/30">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
                   <div className="text-slate-300 text-sm text-center sm:text-left">
@@ -826,7 +708,6 @@ const handleUpdateSPK = async (e: React.FormEvent) => {
                 </div>
               </div>
 
-              {/* TOMBOL AKSI */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700 sticky bottom-0 bg-gray-900/90 p-2 -mx-2 sm:mx-0 sm:p-0 sm:bg-transparent sm:static sm:border-0">
                 <button type="button" onClick={editingId ? handleCancelEdit : resetForm} className="flex-1 py-3 bg-gray-800 text-white rounded-xl font-bold hover:bg-gray-700 transition-all text-sm sm:text-base">
                   {editingId ? 'Batal Edit' : 'Batal'}
