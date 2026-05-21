@@ -130,6 +130,7 @@ export interface Expense {
   amount: number;
   receipt_image?: string;
   created_at?: number;
+  updated_at?: number;
 }
 
 // 10. Database Class dengan typing yang benar
