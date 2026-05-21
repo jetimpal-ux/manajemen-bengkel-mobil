@@ -1,0 +1,15 @@
+{
+  "name": "Bengkel App",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Bengkel App",
+      "onAutoForward": "openBrowser",
+      "requireLocalPort": false,
+      "elevateIfNeeded": true
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  }
+}
