@@ -116,6 +116,7 @@ export interface ServiceQueue {
   vehicle_plate: string;
   owner_name?: string;
   service_type?: string;
+  estimated_time?: number;
   status: 'waiting' | 'in_progress' | 'completed';
   created_at: number;
   updated_at: number;
