@@ -43,6 +43,7 @@ export interface Customer {
   vehicle_plate?: string;
   email?: string;
   address?: string;
+  notes?: string;
   updated_at: number;
 }
 
