@@ -36,13 +36,11 @@ export default function UnpaidList() {
     const newStatus = newRemaining === 0 ? "Lunas" : "Belum Lunas";
 
     // Update transaksi
-    await db.transactions.update(selectedTransaction.id!, {
-      remaining_amount: newRemaining,
-      amount_paid: newPaid,
-      status: newStatus,
-      payment_method: paymentMethod,
-      updated_at: Date.now()
-    });
+   await db.transactions.update(id, {
+  status: newStatus,
+  payment_method: paymentMethod,
+  updated_at: Date.now()
+} as any);
 
     // Simpan data untuk nota
     setLastPayment({
