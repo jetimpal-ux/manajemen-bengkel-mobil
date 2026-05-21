@@ -733,11 +733,14 @@ export default function Home() {
         </div>
       )}
 
-      {/* MODAL KASIR (3D) - UPDATED WITH PAYMENT, DISCOUNT & PENDING */}
+            {/* MODAL KASIR (3D) - UPDATED LAYOUT */}
       {isKasirOpen && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl w-full max-w-6xl h-[85vh] flex flex-col border border-orange-500/30">
-            <div className="p-5 border-b border-gray-800 flex justify-between items-center bg-gray-900/50">
+          {/* Tambah h-[90vh] agar lebih tinggi dan flex-col */}
+          <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col border border-orange-500/30 overflow-hidden">
+            
+            {/* HEADER MODAL (Sticky Top) */}
+            <div className="p-5 border-b border-gray-800 flex justify-between items-center bg-gray-900/50 flex-shrink-0">
               <div className="flex items-center gap-3">
                 <ShoppingCart className="w-6 h-6 text-orange-500"/> 
                 <span className="text-xl font-black text-white">KASIR / TRANSAKSI</span>
@@ -755,7 +758,10 @@ export default function Home() {
               </div>
             </div>
             
+            {/* BODY MODAL (Scrollable Area) */}
             <div className="flex flex-1 overflow-hidden">
+              
+              {/* KIRI: DAFTAR BARANG (Scrollable) */}
               <div className="flex-1 overflow-y-auto p-6 border-r border-gray-800 bg-gray-900/30 space-y-6">
                 <div className="bg-gray-800/60 p-4 rounded-xl border border-orange-500/20">
                   <h3 className="font-bold text-orange-400 mb-3 uppercase text-sm flex items-center gap-2">
@@ -797,7 +803,9 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* KANAN: KERANJANG & BAYAR (Sticky Bottom / Flex Column) */}
               <div className="w-96 flex flex-col bg-gray-900 border-l border-gray-800">
+                {/* Area Keranjang (Scrollable jika item banyak) */}
                 <div className="flex-1 overflow-y-auto p-6">
                   <h3 className="font-bold text-blue-400 mb-4 uppercase tracking-widest text-sm">Keranjang</h3>
                   {cart.length === 0 ? (
@@ -822,6 +830,7 @@ export default function Home() {
                   )}
                 </div>
                 
+                {/* Area Pembayaran (Sticky di Bawah) */}
                 <div className="p-6 border-t border-gray-800 bg-gray-900 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] space-y-4">
                   {/* DISKON & PAJAK */}
                   <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700 space-y-3">
