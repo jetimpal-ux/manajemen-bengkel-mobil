@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { db, ServiceQueue as ServiceQueueType } from "../../lib/db";
 import { Plus, Clock, CheckCircle, Hammer, Trash2, RefreshCw } from "lucide-react";
 
-export default function ServiceQueue() {
-  const [queues, setQueues] = useState<ServiceQueue[]>([]);
+export default function ServiceQueueManager() {
+  const [queues, setQueues] = useState<ServiceQueueType[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [form, setForm] = useState({
     vehicle_plate: "",
@@ -35,10 +35,9 @@ export default function ServiceQueue() {
     await db.service_queue.add({
       queue_number: qNo,
       vehicle_plate: form.vehicle_plate.toUpperCase(),
-      vehicle_info: form.vehicle_plate.toUpperCase(),
       owner_name: form.owner_name,
       service_type: form.service_type,
-      status: 'menunggu',
+      status: 'waiting',
       estimated_time: form.estimated_time,
       created_at: Date.now(),
       updated_at: Date.now()
@@ -49,7 +48,7 @@ export default function ServiceQueue() {
     loadQueue();
   };
 
-  const updateStatus = async (id: number, newStatus: ServiceQueue['status']) => {
+  const updateStatus = async (id: number, newStatus: ServiceQueueType['status']) => {
     await db.service_queue.update(id, { status: newStatus, updated_at: Date.now() });
     loadQueue();
   };
@@ -62,9 +61,9 @@ export default function ServiceQueue() {
   };
 
   // Filter status
-  const waiting = queues.filter(q => q.status === 'menunggu');
-  const inProgress = queues.filter(q => q.status === 'diservis');
-  const finished = queues.filter(q => q.status === 'selesai');
+  const waiting = queues.filter(q => q.status === 'waiting');
+  const inProgress = queues.filter(q => q.status === 'in_progress');
+  const finished = queues.filter(q => q.status === 'completed');
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-black text-slate-100">
@@ -102,7 +101,7 @@ export default function ServiceQueue() {
               <QueueCard 
                 key={q.id} 
                 q={q} 
-                nextStatus="diservis" 
+                nextStatus="in_progress" 
                 nextLabel="Mulai Service" 
                 color="yellow" 
                 onStatusChange={updateStatus}
@@ -125,7 +124,7 @@ export default function ServiceQueue() {
               <QueueCard 
                 key={q.id} 
                 q={q} 
-                nextStatus="selesai" 
+                nextStatus="completed" 
                 nextLabel="Selesai" 
                 color="blue" 
                 onStatusChange={updateStatus}
@@ -157,7 +156,7 @@ export default function ServiceQueue() {
                   // 👈 UPDATED: Simpan data kendaraan lengkap ke sessionStorage
                   sessionStorage.setItem('kasir_vehicle_data', JSON.stringify({
                     plate: q.vehicle_plate,
-                    model: q.vehicle_info || '-',
+                    model: q.vehicle_plate,
                     owner: q.owner_name
                   }));
                   sessionStorage.setItem('selected_vehicle_plate', q.vehicle_plate);
@@ -213,15 +212,15 @@ export default function ServiceQueue() {
   );
 }
 
-// Komponen Kartu Antrian - ✅ SUDAH DIPERBAIKI + FITUR LANJUT KE KASIR
+// Komponen Kartu Antrian
 function QueueCard({ q, nextStatus, nextLabel, color, onStatusChange, onDelete, onToCashier }: { 
-  q: ServiceQueue, 
+  q: ServiceQueueType, 
   nextStatus: string | null, 
   nextLabel: string, 
   color: string, 
   onStatusChange: (id: number, status: string) => void,
   onDelete: (id: number) => void,
-  onToCashier?: () => void // 👈 Updated: tidak perlu parameter plate lagi
+  onToCashier?: () => void
 }) {
   const colorMap: any = {
     yellow: "border-yellow-500/30 bg-yellow-900/10",
@@ -257,8 +256,8 @@ function QueueCard({ q, nextStatus, nextLabel, color, onStatusChange, onDelete, 
         </button>
       )}
 
-      {/* 👈 TOMBOL BARU: Lanjut ke Kasir (Hanya muncul jika status = selesai) */}
-      {q.status === 'selesai' && onToCashier && (
+      {/* 👈 TOMBOL BARU: Lanjut ke Kasir (Hanya muncul jika status = completed) */}
+      {q.status === 'completed' && onToCashier && (
         <button 
           onClick={onToCashier}
           className="w-full mt-2 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-white flex items-center justify-center gap-2 transition-all shadow-lg"
