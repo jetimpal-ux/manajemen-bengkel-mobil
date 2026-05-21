@@ -165,16 +165,3 @@ class BengkelDatabase extends Dexie {
 
 // 11. Export database instance
 export const db = new BengkelDatabase();
-
-// 12. Export semua types
-export type { 
-  Item, 
-  SPK, 
-  Customer, 
-  Vehicle,
-  Transaction,
-  ServiceRecord, 
-  PendingTransaction, 
-  ServiceQueue,
-  Expense 
-};
