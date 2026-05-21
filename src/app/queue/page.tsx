@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { db, ServiceQueue } from "../../lib/db";
+import { db, ServiceQueue as ServiceQueueType } from "../../lib/db";
 import { Plus, Clock, CheckCircle, Hammer, Trash2, RefreshCw } from "lucide-react";
 
 export default function ServiceQueue() {
