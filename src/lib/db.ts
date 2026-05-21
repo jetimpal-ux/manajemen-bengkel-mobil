@@ -1,20 +1,6 @@
 import Dexie from 'dexie';
 
-// 1. Interface untuk Riwayat Servis
-export interface ServiceRecord {
-  id?: number;
-  spk_id?: number;
-  customer_name: string;
-  vehicle_plate: string;
-  service_type: string;
-  description?: string;
-  date: number;
-  cost: number;
-  status: string;
-  updated_at: number;
-}
-
-// 2. Interface untuk Item/Barang
+// 1. Interface untuk Item/Barang
 export interface Item {
   id?: number;
   sku: string;
@@ -27,7 +13,7 @@ export interface Item {
   updated_at: number;
 }
 
-// 3. Interface untuk SPK
+// 2. Interface untuk SPK
 export interface SPK {
   id?: number;
   spk_number: string;
@@ -49,7 +35,32 @@ export interface SPK {
   updated_at: number;
 }
 
-// 4. Interface untuk Transaksi Pending
+// 3. Interface untuk Customer
+export interface Customer {
+  id?: number;
+  name: string;
+  phone?: string;
+  vehicle_plate?: string;
+  email?: string;
+  address?: string;
+  updated_at?: number;
+}
+
+// 4. Interface untuk Riwayat Servis
+export interface ServiceRecord {
+  id?: number;
+  spk_id?: number;
+  customer_name: string;
+  vehicle_plate: string;
+  service_type: string;
+  description?: string;
+  date: number;
+  cost: number;
+  status: string;
+  updated_at: number;
+}
+
+// 5. Interface untuk Pending Transaction
 export interface PendingTransaction {
   id?: number;
   temp_id: string;
@@ -66,7 +77,7 @@ export interface PendingTransaction {
   updated_at: number;
 }
 
-// 5. Interface untuk Antrian Service
+// 6. Interface untuk Service Queue
 export interface ServiceQueue {
   id?: number;
   queue_number: string;
@@ -78,11 +89,9 @@ export interface ServiceQueue {
   updated_at: number;
 }
 
-// 6. Inisialisasi Database Dexie
+// 7. Inisialisasi Database
 const db = new Dexie("BengkelDatabase");
 
-// 7. Definisi Schema Database
-// PERHATIKAN: Version 2 untuk menambahkan riwayat_servis
 db.version(2).stores({
   items: "++id, sku, name, category, stock, updated_at",
   spk: "++id, spk_number, vehicle_plate, status, date",
@@ -92,11 +101,9 @@ db.version(2).stores({
   pending_transactions: "++id, temp_id, date, customer_name",
   expenses: "++id, date, category, description",
   service_queue: "++id, queue_number, vehicle_plate, status, created_at",
-  
-  // Tabel Riwayat Servis (dengan index spk_id)
-  riwayat_servis: "++id, spk_id, vehicle_plate, date, status" 
+  riwayat_servis: "++id, spk_id, vehicle_plate, date, status"
 });
 
-// 8. Export Database & Interface
+// 8. Export semua
 export { db };
-export type { Item, SPK, PendingTransaction, ServiceQueue };
+export type { Item, SPK, Customer, ServiceRecord, PendingTransaction, ServiceQueue };
