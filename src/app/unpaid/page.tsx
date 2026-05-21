@@ -28,40 +28,42 @@ export default function UnpaidList() {
   const totalUnpaid = unpaidTransactions.reduce((sum, t) => sum + (t.remaining_amount || 0), 0);
 
   const handlePayment = async () => {
-    if (!selectedTransaction || paymentAmount <= 0) return;
+  if (!selectedTransaction || paymentAmount <= 0) return;
 
-    const remaining = selectedTransaction.remaining_amount || 0;
-    const newRemaining = Math.max(0, remaining - paymentAmount);
-    const newPaid = (selectedTransaction.amount_paid || 0) + paymentAmount;
-    const newStatus = newRemaining === 0 ? "Lunas" : "Belum Lunas";
+  const remaining = selectedTransaction.remaining_amount || 0;
+  const newRemaining = Math.max(0, remaining - paymentAmount);
+  const newPaid = (selectedTransaction.amount_paid || 0) + paymentAmount;
+  const newStatus = newRemaining === 0 ? "Lunas" : "Belum Lunas";
 
-    // Update transaksi
-   await db.transactions.update(id, {
-  status: newStatus,
-  payment_method: paymentMethod,
-  updated_at: Date.now()
-} as any);
+  // ✅ PERBAIKAN: Gunakan selectedTransaction.id
+  await db.transactions.update(selectedTransaction.id!, {
+    status: newStatus,
+    payment_method: paymentMethod,
+    amount_paid: newPaid,
+    remaining_amount: newRemaining,
+    updated_at: Date.now()
+  } as any);
 
-    // Simpan data untuk nota
-    setLastPayment({
-      invoiceNo: selectedTransaction.invoice_number,
-      customerName: selectedTransaction.customer_name || "Umum",
-      paymentDate: Date.now(),
-      paymentMethod: paymentMethod,
-      totalAmount: selectedTransaction.total_amount,
-      previouslyPaid: selectedTransaction.amount_paid || 0,
-      thisPayment: paymentAmount,
-      remaining: newRemaining,
-      status: newStatus,
-      items: selectedTransaction.items
-    });
+  // Simpan data untuk nota
+  setLastPayment({
+    invoiceNo: selectedTransaction.invoice_number,
+    customerName: selectedTransaction.customer_name || "Umum",
+    paymentDate: Date.now(),
+    paymentMethod: paymentMethod,
+    totalAmount: selectedTransaction.total_amount,
+    previouslyPaid: selectedTransaction.amount_paid || 0,
+    thisPayment: paymentAmount,
+    remaining: newRemaining,
+    status: newStatus,
+    items: selectedTransaction.items
+  });
 
-    setIsPaymentOpen(false);
-    setShowReceipt(true);
-    setSelectedTransaction(null);
-    setPaymentAmount(0);
-    loadUnpaid();
-  };
+  setIsPaymentOpen(false);
+  setShowReceipt(true);
+  setSelectedTransaction(null);
+  setPaymentAmount(0);
+  loadUnpaid();
+};
 
   const printReceipt = async () => {
     if (!receiptRef.current) return;
