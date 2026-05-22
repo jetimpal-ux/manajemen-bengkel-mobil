@@ -524,9 +524,9 @@ export default function Home() {
       <body>
         <div class="container">
           <div class="header">
-            <h2>BENGKEL SERVICE PRO</h2>
+            <h2>WAS GARAGE</h2>
             <p>${title}</p>
-            <p>Jl. Bengkel No. 1, Kota Anda | Telp: 0812-3456-7890</p>
+            <p>Jl. Siswa Sario, Manado | Telp: 0813-5656-7167</p>
           </div>
           
           <div class="info">
