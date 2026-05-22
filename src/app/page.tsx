@@ -494,6 +494,31 @@ export default function Home() {
           .highlight { color: ${isBon ? 'red' : 'green'}; font-weight: bold; }
           .footer { text-align: center; margin-top: 20px; font-size: 10px; color: #666; }
           @media print { body { padding: 0; } .container { border: none; } }
+          /* Tambahkan di src/app/globals.css atau di <style> tag */
+.btn-chrome {
+  background: linear-gradient(to bottom, #d4d4d8, #a1a1aa, #71717a);
+  border: 2px solid #52525b;
+  transition: all 0.2s;
+}
+.btn-chrome:hover {
+  background: linear-gradient(to bottom, #e4e4e7, #d4d4d8, #a1a1aa);
+  border-color: #71717a;
+}
+.btn-chrome:active { transform: translateY(2px); }
+
+.btn-orange {
+  background: linear-gradient(to bottom, #f97316, #ea580c);
+  border: 2px solid #f97316;
+  box-shadow: 0 4px 0 #7c2d12;
+  transition: all 0.2s;
+}
+.btn-orange:hover {
+  background: linear-gradient(to bottom, #fb923c, #f97316);
+}
+.btn-orange:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
         </style>
       </head>
       <body>
@@ -590,82 +615,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white p-4 md:p-8">
       
-      {/* HEADER UTAMA */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-900/50">
-            <Wrench className="w-7 h-7 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black italic">
-              <span className="text-orange-500">APK Bengkel</span>
-              <span className="text-white"> Je-Premium</span>
-            </h1>
-            <p className="text-zinc-500 text-sm">Maintenance - Service - Sparepart</p>
-          </div>
-        </div>
-
-        {/* MENU NAVIGASI - RESPONSIVE (ICONS ONLY DI HP) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 mb-8">
-          
-          {/* Inventaris */}
-          <Link href="/" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <Package className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Inventaris</span>
-          </Link>
-
-          {/* SPK */}
-          <Link href="/spk" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <FileText className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">SPK</span>
-          </Link>
-
-          {/* Kendaraan */}
-          <Link href="/vehicles" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <Car className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Kendaraan</span>
-          </Link>
-
-          {/* Antrian - ORANGE */}
-          <Link href="/queue" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-orange-600 border-2 border-orange-500 rounded-2xl hover:bg-orange-500 shadow-lg shadow-orange-900/50 transition-all active:scale-95">
-            <Clock className="w-8 h-8 md:w-5 md:h-5 text-white" />
-            <span className="text-sm font-bold text-white md:ml-2 hidden md:inline">Antrian</span>
-          </Link>
-
-          {/* Pelanggan */}
-          <Link href="/customers" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <Users className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Pelanggan</span>
-          </Link>
-
-          {/* Tagihan */}
-          <Link href="/unpaid" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <CreditCard className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Tagihan</span>
-          </Link>
-
-          {/* Riwayat */}
-          <Link href="/riwayat" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <History className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Riwayat</span>
-          </Link>
-
-          {/* Pengeluaran */}
-          <Link href="/expenses" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95">
-            <DollarSign className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Pengeluaran</span>
-          </Link>
-
-          {/* Dashboard */}
-          <Link href="/dashboard" className="group flex flex-col md:flex-row items-center justify-center gap-2 p-3 md:p-4 bg-zinc-900 border-2 border-zinc-800 rounded-2xl hover:border-orange-500 hover:bg-zinc-800 transition-all active:scale-95 md:col-span-2 lg:col-span-1">
-            <BarChart2 className="w-8 h-8 md:w-5 md:h-5 text-zinc-400 group-hover:text-orange-500 transition-colors" />
-            <span className="text-sm font-bold text-zinc-300 group-hover:text-white md:ml-2 hidden md:inline">Dashboard</span>
-          </Link>
-
-        </div>
-      </div>
-
-      {/* CONTENT INVENTARIS */}
+      {/* CONTENT INVENTARIS - TANPA NAVIGASI DUPlikat */}
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER INVENTARIS */}
@@ -678,19 +628,19 @@ export default function Home() {
           </div>
           
           <div className="flex flex-wrap gap-2 md:gap-3">
-            <button onClick={handleExport} className="bg-gradient-to-b from-zinc-300 via-zinc-400 to-zinc-500 hover:from-zinc-200 hover:via-zinc-300 hover:to-zinc-400 text-black px-3 md:px-4 py-2 md:py-3 rounded-xl border border-zinc-600 shadow-md active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm">
+            <button onClick={handleExport} className="btn-chrome text-black px-3 md:px-4 py-2 md:py-3 rounded-xl flex items-center gap-2 font-bold text-sm">
               <FileSpreadsheet className="w-4 h-4" /> <span className="hidden sm:inline">Export</span>
             </button>
             <button onClick={() => setShowLowStock(!showLowStock)} className={`px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm ${showLowStock ? 'bg-orange-600 border-orange-500 text-white' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
               <AlertTriangle className="w-4 h-4" /> <span className="hidden sm:inline">Stok Tipis</span>
             </button>
-            <button onClick={() => setIsKasirOpen(true)} className="bg-orange-600 hover:bg-orange-500 text-white px-3 md:px-4 py-2 md:py-3 rounded-xl shadow-lg shadow-orange-900/50 active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm">
+            <button onClick={() => setIsKasirOpen(true)} className="btn-orange text-white px-3 md:px-4 py-2 md:py-3 rounded-xl flex items-center gap-2 font-bold text-sm">
               <ShoppingCart className="w-4 h-4" /> <span className="hidden sm:inline">Kasir</span>
             </button>
             <button onClick={async () => { setIsSyncing(true); await syncData(); setIsSyncing(false); loadItems(); }} className="bg-zinc-800 hover:bg-zinc-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-xl border border-zinc-600 active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm">
               <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Sync</span>
             </button>
-            <button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-orange-600 hover:bg-orange-500 text-white px-3 md:px-4 py-2 md:py-3 rounded-xl shadow-lg shadow-orange-900/50 active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm">
+            <button onClick={() => { resetForm(); setIsFormOpen(true); }} className="btn-orange text-white px-3 md:px-4 py-2 md:py-3 rounded-xl flex items-center gap-2 font-bold text-sm">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Tambah</span>
             </button>
           </div>
@@ -807,7 +757,7 @@ export default function Home() {
               </div>
               <div className="flex gap-3 pt-4">
                 <button type="button" onClick={resetForm} className="flex-1 py-3 text-zinc-400 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-xl font-bold transition-all">Batal</button>
-                <button type="submit" className="flex-1 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-bold shadow-lg shadow-orange-900/50 transition-all">Simpan Data</button>
+                <button type="submit" className="flex-1 py-3 btn-orange text-white rounded-xl font-bold">Simpan Data</button>
               </div>
             </form>
           </div>
@@ -862,7 +812,7 @@ export default function Home() {
                         className="w-32 p-2 bg-black border-2 border-zinc-700 rounded-lg text-white text-sm focus:border-orange-500 outline-none" 
                         placeholder="Harga" 
                       />
-                      <button onClick={addCustomItemToCart} className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold text-sm transition-all">
+                      <button onClick={addCustomItemToCart} className="btn-orange text-white px-4 py-2 rounded-lg font-bold text-sm">
                         + Tambah
                       </button>
                     </div>
@@ -877,7 +827,7 @@ export default function Home() {
                             <div className="font-bold text-white text-base group-hover:text-orange-500 transition-colors">{item.name}</div>
                             <div className="text-xs text-zinc-500 mt-1">Stok: {item.stock} | {formatRupiah(item.sell_price)}</div>
                           </div>
-                          <button className="bg-orange-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">+</button>
+                          <button className="btn-orange text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">+</button>
                         </div>
                       ))}
                     </div>
@@ -951,7 +901,7 @@ export default function Home() {
                   <div>
                     <label className="text-xs font-bold text-zinc-500 uppercase mb-2 block">Metode Pembayaran</label>
                     <div className="grid grid-cols-2 gap-2">
-                      <button type="button" onClick={() => { setPaymentMethod("Tunai"); setAmountPaid(getTotalPrice()); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Tunai' ? 'bg-orange-600 border-orange-500 text-white shadow-lg' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
+                      <button type="button" onClick={() => { setPaymentMethod("Tunai"); setAmountPaid(getTotalPrice()); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Tunai' ? 'btn-orange text-white' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
                         💵 Tunai
                       </button>
                       <button type="button" onClick={() => { setPaymentMethod("Transfer"); setAmountPaid(getTotalPrice()); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Transfer' ? 'bg-zinc-700 border-zinc-500 text-white' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
@@ -960,7 +910,7 @@ export default function Home() {
                       <button type="button" onClick={() => { setPaymentMethod("Bon"); setAmountPaid(0); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Bon' ? 'bg-orange-900 border-orange-700 text-white' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
                         📝 Bon
                       </button>
-                      <button type="button" onClick={() => { setPaymentMethod("Sebagian"); setAmountPaid(0); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Sebagian' ? 'bg-orange-600 border-orange-500 text-white shadow-lg' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
+                      <button type="button" onClick={() => { setPaymentMethod("Sebagian"); setAmountPaid(0); }} className={`p-3 rounded-xl text-sm font-bold border-2 transition-all ${paymentMethod === 'Sebagian' ? 'btn-orange text-white' : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>
                         💰 Sebagian
                       </button>
                     </div>
@@ -991,7 +941,7 @@ export default function Home() {
                       className={`w-full py-4 rounded-xl font-black text-lg shadow-lg active:shadow-none active:translate-y-1 transition-all flex items-center justify-center gap-2
                         ${paymentMethod === 'Bon' 
                           ? 'bg-gradient-to-r from-orange-700 to-orange-800 hover:from-orange-600 hover:to-orange-700' 
-                          : 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 shadow-orange-900/50'
+                          : 'btn-orange'
                         } 
                         disabled:from-zinc-800 disabled:to-zinc-900 disabled:text-zinc-600 disabled:shadow-none disabled:cursor-not-allowed text-white`}
                     >
@@ -1104,7 +1054,7 @@ export default function Home() {
                   <Printer className="w-4 h-4"/> Cetak Bon
                 </button>
               ) : (
-                <button onClick={handlePrintDocument} className="py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all border border-orange-500 shadow-lg shadow-orange-900/50">
+                <button onClick={handlePrintDocument} className="py-3 btn-orange flex items-center justify-center gap-2">
                   <Printer className="w-4 h-4"/> Cetak Struk
                 </button>
               )}
