@@ -9,32 +9,6 @@ import {
   Users, History, DollarSign, BarChart2, Car, Wrench
 } from "lucide-react";
 
-/* Tambahkan di src/app/globals.css atau di <style> tag */
-.btn-chrome {
-  background: linear-gradient(to bottom, #d4d4d8, #a1a1aa, #71717a);
-  border: 2px solid #52525b;
-  transition: all 0.2s;
-}
-.btn-chrome:hover {
-  background: linear-gradient(to bottom, #e4e4e7, #d4d4d8, #a1a1aa);
-  border-color: #71717a;
-}
-.btn-chrome:active { transform: translateY(2px); }
-
-.btn-orange {
-  background: linear-gradient(to bottom, #f97316, #ea580c);
-  border: 2px solid #f97316;
-  box-shadow: 0 4px 0 #7c2d12;
-  transition: all 0.2s;
-}
-.btn-orange:hover {
-  background: linear-gradient(to bottom, #fb923c, #f97316);
-}
-.btn-orange:active {
-  box-shadow: none;
-  transform: translateY(4px);
-}
-
 type CartItem = Item & { qty: number };
 
 export default function Home() {
