@@ -9,6 +9,32 @@ import {
   Users, History, DollarSign, BarChart2, Car, Wrench
 } from "lucide-react";
 
+/* Tambahkan di src/app/globals.css atau di <style> tag */
+.btn-chrome {
+  background: linear-gradient(to bottom, #d4d4d8, #a1a1aa, #71717a);
+  border: 2px solid #52525b;
+  transition: all 0.2s;
+}
+.btn-chrome:hover {
+  background: linear-gradient(to bottom, #e4e4e7, #d4d4d8, #a1a1aa);
+  border-color: #71717a;
+}
+.btn-chrome:active { transform: translateY(2px); }
+
+.btn-orange {
+  background: linear-gradient(to bottom, #f97316, #ea580c);
+  border: 2px solid #f97316;
+  box-shadow: 0 4px 0 #7c2d12;
+  transition: all 0.2s;
+}
+.btn-orange:hover {
+  background: linear-gradient(to bottom, #fb923c, #f97316);
+}
+.btn-orange:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
 type CartItem = Item & { qty: number };
 
 export default function Home() {
@@ -494,39 +520,14 @@ export default function Home() {
           .highlight { color: ${isBon ? 'red' : 'green'}; font-weight: bold; }
           .footer { text-align: center; margin-top: 20px; font-size: 10px; color: #666; }
           @media print { body { padding: 0; } .container { border: none; } }
-          /* Tambahkan di src/app/globals.css atau di <style> tag */
-.btn-chrome {
-  background: linear-gradient(to bottom, #d4d4d8, #a1a1aa, #71717a);
-  border: 2px solid #52525b;
-  transition: all 0.2s;
-}
-.btn-chrome:hover {
-  background: linear-gradient(to bottom, #e4e4e7, #d4d4d8, #a1a1aa);
-  border-color: #71717a;
-}
-.btn-chrome:active { transform: translateY(2px); }
-
-.btn-orange {
-  background: linear-gradient(to bottom, #f97316, #ea580c);
-  border: 2px solid #f97316;
-  box-shadow: 0 4px 0 #7c2d12;
-  transition: all 0.2s;
-}
-.btn-orange:hover {
-  background: linear-gradient(to bottom, #fb923c, #f97316);
-}
-.btn-orange:active {
-  box-shadow: none;
-  transform: translateY(4px);
-}
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h2>WAS GARAGE</h2>
+            <h2>BENGKEL SERVICE PRO</h2>
             <p>${title}</p>
-            <p>Jl. Siswa Sario, Manado | Telp: 0813-5656-7167</p>
+            <p>Jl. Bengkel No. 1, Kota Anda | Telp: 0812-3456-7890</p>
           </div>
           
           <div class="info">
