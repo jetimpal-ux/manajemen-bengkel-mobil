@@ -1,14 +1,11 @@
 "use client";
-import Link from 'next/link'; 
+import Link from 'next/link';
 import { useState, useEffect, useRef } from "react";
 import { db, Item } from "../lib/db";
-import { syncData } from "../lib/sync";
-import { 
-  Plus, Trash2, Package, RefreshCw, Pencil, 
-  Search, FileSpreadsheet, AlertTriangle, ShoppingCart, Camera, X, Check, CreditCard, FileText, Printer, Save, Clock,
-  Users, History, DollarSign, BarChart2, Car, Wrench
-} from "lucide-react";
-
+import { exportBackup, importBackup, getLastBackupTime } from "../lib/backup";
+import { getBengkelConfig, updateBengkelConfig, uploadLogo, type BengkelConfig } from "../lib/bengkelConfig";
+import { Plus, Trash2, Package, RefreshCw, Pencil, Search, FileSpreadsheet, AlertTriangle, ShoppingCart, Camera, X, Check, Printer, Save, Clock, DollarSign, Settings, Upload, TrendingUp, FileText } from "lucide-react";
+import { jsPDF } from "jspdf";
 type CartItem = Item & { qty: number };
 
 export default function Home() {
