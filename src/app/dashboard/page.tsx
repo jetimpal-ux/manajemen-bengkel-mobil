@@ -1,9 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { db, Transaction, ServiceRecord } from "../../lib/db";
-import { 
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid 
-} from "recharts";
 import { jsPDF } from "jspdf";
 import { Calendar, TrendingUp, DollarSign, Users, FileText, AlertCircle, Wrench, Download, Trash2 } from "lucide-react";
 import { exportBackup, importBackup, getLastBackupTime, type BackupData } from "../../lib/backup";
@@ -44,11 +41,6 @@ export default function Dashboard() {
   const totalCost = transactions.reduce((s, t) => s + t.total_cost, 0);
   const grossProfit = totalRevenue - totalCost;
   const netProfit = grossProfit - opex;
-
-  // Chart Data
-  const itemCounts: Record<string, number> = {};
-  transactions.forEach(t => t.items.forEach(i => { itemCounts[i.name] = (itemCounts[i.name] || 0) + i.qty; }));
-  const chartData = Object.entries(itemCounts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name, qty]) => ({ name, qty }));
 
   // Reminder Logic
   const getReminders = () => {
@@ -188,45 +180,24 @@ export default function Dashboard() {
         <StatCard title="Laba Bersih" value={`Rp ${netProfit.toLocaleString('id-ID')}`} icon={<TrendingUp className={netProfit >= 0 ? "text-green-600" : "text-red-600"}/>} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* CHART (DARK THEME) */}
-        <div className="bg-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-orange-500/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-          <h3 className="font-bold mb-6 text-orange-400 text-lg uppercase tracking-wider">Barang Terlaris (Top 5)</h3>
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 12}} />
-                <YAxis tick={{fill: '#94a3b8'}} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #f97316', borderRadius: '12px', color: '#fff' }} 
-                  itemStyle={{ color: '#f97316' }}
-                />
-                <Bar dataKey="qty" fill="#f97316" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+      {/* TABEL LABA RUGI DETAIL - FULL WIDTH */}
+      <div className="bg-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-orange-500/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="font-bold text-orange-400 text-lg uppercase tracking-wider">Detail Laba Rugi</h3>
+          <button onClick={generateReportPDF} className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl shadow-[0_4px_0_rgb(153,27,27)] active:shadow-none active:translate-y-[4px] transition-all flex gap-2 font-bold text-sm">
+            <Download className="w-4 h-4"/> Download PDF
+          </button>
         </div>
-
-        {/* TABEL LABA RUGI DETAIL */}
-        <div className="bg-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-orange-500/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-orange-400 text-lg uppercase tracking-wider">Detail Laba Rugi</h3>
-            <button onClick={generateReportPDF} className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl shadow-[0_4px_0_rgb(153,27,27)] active:shadow-none active:translate-y-[4px] transition-all flex gap-2 font-bold text-sm">
-              <Download className="w-4 h-4"/> Download PDF
-            </button>
-          </div>
-          <div className="space-y-4 text-sm bg-gray-800/50 p-6 rounded-xl border border-white/5">
-            <Row label="Total Transaksi" value={`${transactions.length} x`} />
-            <div className="h-px bg-gray-700 my-2"></div>
-            <Row label="Total Pendapatan (Omzet)" value={`Rp ${totalRevenue.toLocaleString('id-ID')}`} highlight />
-            <Row label="HPP (Harga Pokok Penjualan)" value={`- Rp ${totalCost.toLocaleString('id-ID')}`} />
-            <Row label="Laba Kotor" value={`= Rp ${grossProfit.toLocaleString('id-ID')}`} bold />
-            <div className="h-px bg-gray-700 my-2"></div>
-            <Row label="Biaya Operasional" value={`- Rp ${opex.toLocaleString('id-ID')}`} />
-            <div className="border-t border-orange-500/30 pt-4 mt-4">
-              <Row label="LABA BERSIH" value={`Rp ${netProfit.toLocaleString('id-ID')}`} bold color={netProfit >= 0 ? "text-green-400" : "text-red-400"} size="text-2xl" />
-            </div>
+        <div className="space-y-4 text-sm bg-gray-800/50 p-6 rounded-xl border border-white/5">
+          <Row label="Total Transaksi" value={`${transactions.length} x`} />
+          <div className="h-px bg-gray-700 my-2"></div>
+          <Row label="Total Pendapatan (Omzet)" value={`Rp ${totalRevenue.toLocaleString('id-ID')}`} highlight />
+          <Row label="HPP (Harga Pokok Penjualan)" value={`- Rp ${totalCost.toLocaleString('id-ID')}`} />
+          <Row label="Laba Kotor" value={`= Rp ${grossProfit.toLocaleString('id-ID')}`} bold />
+          <div className="h-px bg-gray-700 my-2"></div>
+          <Row label="Biaya Operasional" value={`- Rp ${opex.toLocaleString('id-ID')}`} />
+          <div className="border-t border-orange-500/30 pt-4 mt-4">
+            <Row label="LABA BERSIH" value={`Rp ${netProfit.toLocaleString('id-ID')}`} bold color={netProfit >= 0 ? "text-green-400" : "text-red-400"} size="text-2xl" />
           </div>
         </div>
       </div>
