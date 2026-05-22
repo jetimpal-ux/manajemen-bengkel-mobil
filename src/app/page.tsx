@@ -1,4 +1,5 @@
 "use client";
+import Link from 'next/link'; 
 import { useState, useEffect, useRef } from "react";
 import { db, Item } from "../lib/db";
 import { syncData } from "../lib/sync";
