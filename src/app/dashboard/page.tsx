@@ -176,7 +176,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <StatCard title="Pendapatan" value={`Rp ${totalRevenue.toLocaleString('id-ID')}`} icon={<DollarSign className="text-green-500"/>} />
         <StatCard title="Laba Kotor" value={`Rp ${grossProfit.toLocaleString('id-ID')}`} icon={<TrendingUp className="text-blue-500"/>} />
-        <StatCard title="Biaya Operasional" value={`Rp ${opex.toLocaleString('id-ID')}`} icon={<Wrench className="text-red-500"/>} isInput onChange={v => setOpex(v)} />
+        <StatCard title="Biaya Operasional" value={`Rp ${opex.toLocaleString('id-ID')}`} icon={<Wrench className="text-red-500"/>} isInput onChange={(v: number) => setOpex(v)} />
         <StatCard title="Laba Bersih" value={`Rp ${netProfit.toLocaleString('id-ID')}`} icon={<TrendingUp className={netProfit >= 0 ? "text-green-600" : "text-red-600"}/>} />
       </div>
 
