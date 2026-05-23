@@ -41,11 +41,16 @@ export default function ServiceHistory() {
     loadRecords();
   };
 
-  const handleEdit = (r: ServiceRecord) => {
-    setEditingRecord(r);
-    setForm({ customer_name: r.customer_name, vehicle_plate: r.vehicle_plate, service_type: r.service_type, description: r.description, cost: r.cost, status: r.status });
-    setIsFormOpen(true);
-  };
+ const handleEdit = (r: ServiceRecord) => {
+  setEditingRecord(r);
+  setForm({ 
+    customer_name: r.customer_name || "", 
+    vehicle_plate: r.vehicle_plate || "", 
+    service_type: r.service_type || "", 
+    description: r.description || "" 
+  });
+  setIsFormOpen(true);
+};
 
   const handleDelete = async (id: number) => {
     if (confirm("Hapus riwayat servis ini?")) {
