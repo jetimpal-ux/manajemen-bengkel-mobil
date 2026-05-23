@@ -48,10 +48,10 @@ export default function ServiceQueueManager() {
     loadQueue();
   };
 
-  const updateStatus = async (id: number, newStatus: ServiceQueueType['status']) => {
-    await db.service_queue.update(id, { status: newStatus, updated_at: Date.now() });
-    loadQueue();
-  };
+  const updateStatus = async (id: number, newStatus: string) => {
+  await db.service_queue.update(id, { status: newStatus, updated_at: Date.now() } as any);
+  loadQueue();
+};
 
   const deleteQueue = async (id: number) => {
     if (confirm("Hapus antrian ini?")) {
