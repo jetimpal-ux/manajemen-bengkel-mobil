@@ -1,4 +1,9 @@
-import { db } from "./db";
+// ==========================================
+// STEP 4-6: SYNC KENDARAAN - DINONAKTIFKAN SEMENTARA
+// ==========================================
+/*
+console.log("🚗 Step 4: Sync Kendaraan...");
+// import { db } from "./db";
 import { supabase } from "./supabaseClient";
 
 export async function syncData() {
@@ -163,4 +168,4 @@ export async function syncData() {
       error: error.message || "Terjadi kesalahan saat sinkronisasi"
     };
   }
-}
+}*/
