@@ -195,7 +195,7 @@ class BengkelDB extends Dexie {
       service_queue: "++id, queue_number, vehicle_plate, status, created_at",
       pending_transactions: "++id, temp_id, date",
       expenses: "++id, date, category",
-      customers: "++id, name, phone, vehicle_plate, updated_at"
+      customers: "++id, name, phone, vehicle_plate, updated_at",
       vehicles: "++id, plate, owner_name, updated_at"
     });
   }
