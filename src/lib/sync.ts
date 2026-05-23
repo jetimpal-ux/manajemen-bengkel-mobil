@@ -87,6 +87,7 @@ export async function syncData() {
       console.log("⚠️ Tidak ada data di cloud");
     }
 
+    /*
     // ==========================================
     // STEP 4: SYNC KENDARAAN (VEHICLES) 🚗
     // ==========================================
@@ -118,7 +119,7 @@ export async function syncData() {
       }
       
       console.log("✅ Upload kendaraan berhasil!");
-    }
+    }/*
 
     // STEP 5: Download kendaraan dari Supabase
     console.log("📥 Step 5: Download kendaraan dari cloud...");
@@ -142,7 +143,7 @@ export async function syncData() {
       
       const vehicleData = cloudVehicles.map(v => ({
         id: v.id,
-        plate_number: v.plate_number,
+        plate: v.plate,
         brand: v.brand,
         model: v.model,
         year: v.year,
