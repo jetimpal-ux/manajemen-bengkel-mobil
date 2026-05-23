@@ -32,9 +32,15 @@ export default function Customers() {
     loadCustomers();
   };
 
-  const handleEdit = (c: Customer) => {
+   const handleEdit = (c: Customer) => {
     setEditingId(c.id || null);
-    setForm({ name: c.name, phone: c.phone, vehicle_plate: c.vehicle_plate || "", notes: c.notes || "" });
+    // Tambahkan || "" pada name dan phone
+    setForm({ 
+      name: c.name || "", 
+      phone: c.phone || "", 
+      vehicle_plate: c.vehicle_plate || "", 
+      notes: c.notes || "" 
+    });
     setIsFormOpen(true);
   };
 
