@@ -610,9 +610,9 @@ for (const c of cart) {
             <button onClick={() => setIsKasirOpen(true)} className="btn-orange text-white px-3 md:px-4 py-2 md:py-3 rounded-xl flex items-center gap-2 font-bold text-sm">
               <ShoppingCart className="w-4 h-4" /> <span className="hidden sm:inline">Kasir</span>
             </button>
-            <button onClick={async () => { setIsSyncing(true); await syncData(); setIsSyncing(false); loadItems(); }} className="bg-zinc-800 hover:bg-zinc-700 text-white px-3 md:px-4 py-2 md:py-3 rounded-xl border border-zinc-600 active:translate-y-1 transition-all flex items-center gap-2 font-bold text-sm">
-              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Sync</span>
-            </button>
+            <button onClick={() => alert('Fitur sync akan ditambahkan nanti')} className="bg-zinc-800 px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-2 border border-zinc-600 opacity-50 cursor-not-allowed" disabled>
+  <RefreshCw className="w-4 h-4"/> Sync
+</button>
             <button onClick={() => { resetForm(); setIsFormOpen(true); }} className="btn-orange text-white px-3 md:px-4 py-2 md:py-3 rounded-xl flex items-center gap-2 font-bold text-sm">
               <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Tambah</span>
             </button>
