@@ -172,8 +172,8 @@ export default function Home() {
 
   const handleExport = () => {
     const headers = ["SKU", "Nama", "Kategori", "Stok", "Harga Beli", "Harga Jual"];
-    const rows = items.map((i: Item) => [i.sku, i.name, i.category, i.stock, i.buy_price, i.sell_price]);
-    let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map((e: string[]) => e.join(",")).join("\n");
+const rows = items.map((i: Item) => [i.sku, i.name, i.category, i.stock.toString(), i.buy_price.toString(), i.sell_price.toString()]);
+let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map((e) => e.join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
