@@ -246,7 +246,7 @@ function QueueCard({ q, nextStatus, nextLabel, color, onStatusChange, onDelete, 
       {/* Tombol Ubah Status (Mulai Service / Selesai) */}
       {nextStatus && onStatusChange && (
         <button 
-          onClick={() => onStatusChange(q.id, nextStatus)} 
+          onClick={() => { if (q.id) onStatusChange(q.id, nextStatus) }}
           className={`w-full mt-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all
             ${color === 'yellow' ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-green-600 hover:bg-green-500 text-white'}
           `}
