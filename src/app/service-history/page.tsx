@@ -41,13 +41,15 @@ export default function ServiceHistory() {
     loadRecords();
   };
 
- const handleEdit = (r: ServiceRecord) => {
+const handleEdit = (r: ServiceRecord) => {
   setEditingRecord(r);
-  setForm({ 
-    customer_name: r.customer_name || "", 
-    vehicle_plate: r.vehicle_plate || "", 
-    service_type: r.service_type || "", 
-    description: r.description || "" 
+  setForm({
+    customer_name: r.customer_name || "",
+    vehicle_plate: r.vehicle_plate || "",
+    service_type: r.service_type || "",
+    description: r.description || "",
+    cost: r.cost || 0,
+    status: r.status || "completed"
   });
   setIsFormOpen(true);
 };
