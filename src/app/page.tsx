@@ -817,9 +817,8 @@ for (const c of cart) {
                       <div className="space-y-3">
                         {cart.map((c: CartItem) => (
                           <div key={c.id} className="bg-black/50 p-3 rounded-lg border border-zinc-700">
-                            <div className="flex justify-between text-sm font-bold text-white mb-2">
-                              <span className={c.id < 0 ? "text-orange-400" : "text-white"}>{c.name}</span>
-                              <span className="text-orange-500">{formatRupiah(c.sell_price * c.qty)}</span>
+  <div className="flex justify-between text-sm font-bold text-white mb-2">
+    <span className={c.id !== undefined && c.id < 0 ? "text-orange-400" : "text-white"}>{c.name}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <button onClick={() => updateCartQty(c.id!, c.qty - 1)} className="w-7 h-7 bg-zinc-800 hover:bg-red-900 rounded flex items-center justify-center font-bold text-white text-sm">-</button>
