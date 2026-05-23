@@ -140,7 +140,6 @@ class BengkelDatabase extends Dexie {
   items!: Table<Item, number>;
   spk!: Table<SPK, number>;
   customers!: Table<Customer, number>;
-  vehicles!: Table<Vehicle, number>;
   transactions!: Table<Transaction, number>;
   riwayat_servis!: Table<ServiceRecord, number>;
   pending_transactions!: Table<PendingTransaction, number>;
