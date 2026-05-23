@@ -91,14 +91,12 @@ export async function syncData() {
     
     if (localVehicles.length > 0) {
       const vehiclesToSend = localVehicles.map(v => ({
-        id: v.id,
-        plate_number: v.plate_number,
-        brand: v.brand,
-        model: v.model,
-        year: v.year,
-        owner_name: v.owner_name,
-        updated_at: new Date(v.updated_at || Date.now()).toISOString()
-      }));
+  id: v.id,
+  plate: v.plate,
+  owner_name: v.owner_name,
+  model: v.model || null,
+  year: v.year || null,
+  }));
 
       console.log("📮 Mengirim data kendaraan ke Supabase...", vehiclesToSend);
 
