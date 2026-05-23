@@ -165,3 +165,39 @@ class BengkelDatabase extends Dexie {
 
 // 11. Export database instance
 export const db = new BengkelDatabase();
+
+export interface BengkelConfig { 
+  id?: number; 
+  nama: string; 
+  alamat?: string; 
+  telepon?: string; 
+  logo_url?: string; 
+  updated_at?: string; 
+}
+
+class BengkelDB extends Dexie {
+  items!: Table<Item, number>;
+  spk!: Table<SPK, number>;
+  transactions!: Table<Transaction, number>;
+  riwayat_servis!: Table<ServiceRecord, number>;
+  service_queue!: Table<ServiceQueue, number>;
+  pending_transactions!: Table<PendingTransaction, number>;
+  expenses!: Table<Expense, number>;
+  customers!: Table<Customer, number>;
+
+  constructor() {
+    super("BengkelDB");
+    this.version(1).stores({
+      items: "++id, sku, name, category, stock, updated_at",
+      spk: "++id, spk_number, vehicle_plate, status, date",
+      transactions: "++id, invoice_number, date, status",
+      riwayat_servis: "++id, spk_id, vehicle_plate, date",
+      service_queue: "++id, queue_number, vehicle_plate, status, created_at",
+      pending_transactions: "++id, temp_id, date",
+      expenses: "++id, date, category",
+      customers: "++id, name, phone, vehicle_plate, updated_at"
+    });
+  }
+}
+
+export const db = new BengkelDB();
