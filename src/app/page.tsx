@@ -340,12 +340,12 @@ let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + row
       tax: taxRate
     });
 
-    // HANYA kurangi stok untuk barang asli (ID > 0)
-    for (const c of cart) {
-      if (c.id > 0) {
-        await db.items.update(c.id!, { stock: c.stock - c.qty, updated_at: Date.now() });
-      }
+  // HANYA kurangi stok untuk barang asli (ID > 0)
+for (const c of cart) {
+    if (c.id !== undefined && c.id > 0) {
+        await db.items.update(c.id, { stock: c.stock - c.qty, updated_at: Date.now() });
     }
+}
 
     setLastTransaction({
       invoiceNo,
