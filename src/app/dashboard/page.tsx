@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   // --- ANALYTICS ---
   const totalRevenue = transactions.reduce((s, t) => s + t.total_amount, 0);
-  const totalCost = transactions.reduce((s, t) => s + t.total_cost, 0);
+  const totalCost = transactions.reduce((s, t) => s + (t.total_cost || 0), 0);
   const grossProfit = totalRevenue - totalCost;
   const netProfit = grossProfit - opex;
 
