@@ -232,7 +232,7 @@ function QueueCard({ q, nextStatus, nextLabel, color, onStatusChange, onDelete, 
     <div className={`p-4 rounded-xl border ${colorMap[color]} hover:scale-[1.02] transition-transform`}>
       <div className="flex justify-between items-start mb-2">
         <span className="font-mono font-bold text-lg text-white">{q.queue_number}</span>
-        <button onClick={() => onDelete(q.id)} className="text-slate-600 hover:text-red-500"><Trash2 className="w-4 h-4"/></button>
+        <button onClick={() => q.id && onDelete(q.id)} className="text-slate-600 hover:text-red-500"><Trash2 className="w-4 h-4"/></button>
       </div>
       <h3 className="font-bold text-white">{q.vehicle_plate}</h3>
       <p className="text-sm text-slate-400">{q.owner_name}</p>
