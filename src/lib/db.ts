@@ -50,12 +50,13 @@ export interface Customer {
 // 4. Interface untuk Vehicle
 export interface Vehicle {
   id?: number;
-  plate_number: string;
-  brand?: string;
+  plate: string;
+  owner_name: string;
   model?: string;
   year?: number;
-  owner_name?: string;
-  phone?: string;
+  last_service_date?: number;
+  last_service_km?: number;
+  notes?: string;
   updated_at: number;
 }
 
@@ -145,6 +146,7 @@ class BengkelDatabase extends Dexie {
   pending_transactions!: Table<PendingTransaction, number>;
   service_queue!: Table<ServiceQueue, number>;
   expenses!: Table<Expense, number>;
+  vehicles!: Table<Vehicle, number>;
 
   constructor() {
     super("BengkelDatabase");
@@ -194,6 +196,7 @@ class BengkelDB extends Dexie {
       pending_transactions: "++id, temp_id, date",
       expenses: "++id, date, category",
       customers: "++id, name, phone, vehicle_plate, updated_at"
+      vehicles: "++id, plate, owner_name, updated_at"
     });
   }
 }
