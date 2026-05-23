@@ -164,8 +164,6 @@ class BengkelDatabase extends Dexie {
 }
 
 // 11. Export database instance
-export const db = new BengkelDatabase();
-
 export interface BengkelConfig { 
   id?: number; 
   nama: string; 
